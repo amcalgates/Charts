@@ -235,6 +235,11 @@ public class YAxisRenderer: AxisRendererBase
         CGContextStrokeLineSegments(context, _gridLineBuffer, 2)
     }
     
+    public func drawGridArea(context context:CGContextRef, position:CGPoint)
+    {
+        
+    }
+    
     public func transformedPositions() -> [CGPoint]
     {
         guard let
