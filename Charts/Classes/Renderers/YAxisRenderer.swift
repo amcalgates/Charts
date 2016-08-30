@@ -200,6 +200,15 @@ public class YAxisRenderer: AxisRendererBase
             for i in 0 ..< positions.count
             {
                 drawGridLine(context: context, position: positions[i])
+                
+                if( i % 2 == 0 && i < positions.count - 2 )
+                {
+                    let position1 = positions[i]
+                    let position2 = positions[i+1]
+                    
+                    drawGridArea(context: context, color: UIColor.blueColor(), y: position1.y, height: fabs(position1.y - position2.y))
+                }
+                
             }
         }
 
@@ -235,9 +244,14 @@ public class YAxisRenderer: AxisRendererBase
         CGContextStrokeLineSegments(context, _gridLineBuffer, 2)
     }
     
-    public func drawGridArea(context context:CGContextRef, position:CGPoint)
+    public func drawGridArea(context context:CGContextRef, color:UIColor, y:CGFloat, height:CGFloat)
     {
+        guard let
+            viewPortHandler = self.viewPortHandler
+            else { return }
         
+        CGContextSetFillColorWithColor(context, color.CGColor)
+        CGContextFillRect(context, CGRectMake(viewPortHandler.contentLeft, y, viewPortHandler.contentRight - viewPortHandler.contentLeft, height))
     }
     
     public func transformedPositions() -> [CGPoint]
