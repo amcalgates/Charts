@@ -187,44 +187,6 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         _leftYAxisRenderer?.renderAxisLine(context: context)
         _rightYAxisRenderer?.renderAxisLine(context: context)
 
-        
-        let barData = self.data as! BarChartData
-        let step = barData.dataSetCount
-        
-        CGContextSaveGState(context)
-        
-        var position = CGPoint(x: 0.0, y: 0.0)
-        var endPosition = CGPoint(x: 0.0, y: 0.0)
-        let valueToPixelMatrix = _leftYAxisRenderer!.transformer!.valueToPixelMatrix
-        
-        // xAxis.filledAreas is an array of a new class called ChartXAxisAreaData
-        // which has startX and endY properties
-        
-        // Iterate through filled areas
-        let c = _xAxis.filledAreas.count
-        for (var i=0; i < c; i++) {
-            
-            
-            // Get start position, using the same logic as used in rendering gridlines
-            let sx = Int(areaData.startX)
-            position.x = CGFloat(sx * step) + CGFloat(sx) * barData.groupSpace - 0.5
-            position = CGPointApplyAffineTransform(position, valueToPixelMatrix)
-            // Get end position
-            let ex = Int(areaData.endX)
-            endPosition.x = CGFloat(ex * step) + CGFloat(ex) * barData.groupSpace - 0.5
-            endPosition = CGPointApplyAffineTransform(endPosition, valueToPixelMatrix)
-            // Draw rectangle - TODO externalize color
-            let rectangle = CGRect(x: position.x, y: viewPortHandler.contentTop, width: CGFloat(endPosition.x-position.x), height: viewPortHandler.contentBottom)
-            let blue = UIColor(red:215/255, green: 231/255, blue: 241/255, alpha: 0.5);
-            CGContextSetFillColorWithColor(context, blue.CGColor)
-            CGContextSetStrokeColorWithColor(context, blue.CGColor)
-            CGContextSetLineWidth(context, 1)
-            CGContextAddRect(context, rectangle)
-            CGContextDrawPath(context, .FillStroke)
-        }
-        
-        CGContextRestoreGState(context)
-        
         if _autoScaleMinMaxEnabled
         {
             autoScale()
