@@ -84,6 +84,8 @@ public class YAxis: AxisBase
     /// **default**: CGFloat.infinity
     public var maxWidth = CGFloat(CGFloat.infinity)
     
+    public var gridAreaColors : NSArray?
+    
     public override init()
     {
         super.init()

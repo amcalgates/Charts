@@ -200,14 +200,31 @@ public class YAxisRenderer: AxisRendererBase
             for i in 0 ..< positions.count
             {
                 drawGridLine(context: context, position: positions[i])
+            }
+        }
+        
+        if( yAxis.gridAreaColors != nil && yAxis.gridAreaColors?.count > 0 )
+        {
+            let positions = transformedPositions()
+            
+            if( positions.count > 0 )
+            {
+                drawGridArea(context: context, index:-1, y: positions[0].y, height: 0)
+            }
+            
+            // draw the grid areas
+            for i in 0 ..< positions.count
+            {
+                let position1 = positions[i]
+                var height:CGFloat = 0
                 
-                if( i % 2 == 0 && i < positions.count - 2 )
+                if( i < positions.count - 1 )
                 {
-                    let position1 = positions[i]
                     let position2 = positions[i+1]
-                    
-                    drawGridArea(context: context, color: UIColor.blueColor(), y: position1.y, height: fabs(position1.y - position2.y))
+                    height = fabs(position1.y - position2.y)
                 }
+                
+                drawGridArea(context: context, index:i+1, y: position1.y, height: height)
                 
             }
         }
@@ -244,14 +261,46 @@ public class YAxisRenderer: AxisRendererBase
         CGContextStrokeLineSegments(context, _gridLineBuffer, 2)
     }
     
-    public func drawGridArea(context context:CGContextRef, color:UIColor, y:CGFloat, height:CGFloat)
+    public func drawGridArea(context context:CGContextRef, index:NSInteger, y:CGFloat, height:CGFloat)
     {
         guard let
             viewPortHandler = self.viewPortHandler
             else { return }
         
+        guard let
+            yAxis = self.axis as? YAxis
+            else { return }
+        
+        var actualHeight = height
+        var actualY = y
+        
+        var color:UIColor
+        
+        if( index == -1 )
+        {
+            actualY = viewPortHandler.contentBottom
+            color = yAxis.gridAreaColors![0] as! UIColor
+        }
+        else
+        {
+            color = yAxis.gridAreaColors![index%yAxis.gridAreaColors!.count] as! UIColor
+        }
+        
+        if( height == 0 )
+        {
+            if( index == -1 )
+            {
+                actualHeight = fabs(viewPortHandler.contentTop - y)
+            }
+            else
+            {
+                actualHeight = fabs(viewPortHandler.contentTop - actualY)
+            }
+            
+        }
+        
         CGContextSetFillColorWithColor(context, color.CGColor)
-        CGContextFillRect(context, CGRectMake(viewPortHandler.contentLeft, y, viewPortHandler.contentRight - viewPortHandler.contentLeft, height))
+        CGContextFillRect(context, CGRectMake(viewPortHandler.contentLeft, actualY - actualHeight, viewPortHandler.contentRight - viewPortHandler.contentLeft, actualHeight))
     }
     
     public func transformedPositions() -> [CGPoint]
