@@ -91,6 +91,8 @@
     leftAxis.drawZeroLineEnabled = NO;
     leftAxis.drawLimitLinesBehindDataEnabled = YES;
     
+    leftAxis.gridAreaColors = @[[UIColor redColor], [UIColor blueColor]];
+    
     _chartView.rightAxis.enabled = NO;
     
     //[_chartView.viewPortHandler setMaximumScaleY: 2.f];
