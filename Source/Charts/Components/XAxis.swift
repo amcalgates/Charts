@@ -61,7 +61,7 @@ open class XAxis: AxisBase
     /// **default**: 1.0
     @objc open var wordWrapWidthPercent: CGFloat = 1.0
     
-    open var gridAreaColors : NSArray?
+    @objc open var gridAreaColors : NSArray?
     
     public override init()
     {
