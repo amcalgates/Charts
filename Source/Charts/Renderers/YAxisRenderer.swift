@@ -246,9 +246,7 @@ open class YAxisRenderer: AxisRendererBase
     
     @objc open func drawGridArea(context:CGContext, index:NSInteger, y:CGFloat, height:CGFloat)
     {
-        guard let
-            viewPortHandler = self.viewPortHandler
-            else { return }
+        let viewPortHandler = self.viewPortHandler
         
         guard let
             yAxis = self.axis as? YAxis
